@@ -12,7 +12,7 @@ export default gql`
   }
 
   type Query {
-    me: User @admin
+    me: User @user
     loginLocal(email: String!, password: String!): AuthResolver
   }
 
@@ -23,7 +23,7 @@ export default gql`
 
   type User {
     id: ID!
-    email: String!
+    email: String
     picture: String!
     firstName: String
     lastName: String

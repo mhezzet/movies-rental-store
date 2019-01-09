@@ -66,11 +66,10 @@ const userSchema = new mongoose.Schema(
       lowercase: true,
       trim: true,
       unique: true,
-      match: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-      required: true
+      match: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     },
-    google_id: String,
-    facebook_id: String,
+    googleID: String,
+    facebookID: String,
     picture: {
       type: String,
       default:
@@ -79,14 +78,14 @@ const userSchema = new mongoose.Schema(
     firstName: {
       type: String,
       maxlength: 255,
-      minlength: 4,
+      minlength: 2,
       lowercase: true,
       trim: true
     },
     lastName: {
       type: String,
       maxlength: 255,
-      minlength: 4,
+      minlength: 2,
       lowercase: true,
       trim: true
     },
