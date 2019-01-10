@@ -122,7 +122,7 @@ async function addAnAddress(_, args, { models: { User }, user: { id } }) {
   user.addresses.push({ ...args.address })
   await user.save()
 
-  return user.addresses
+  return user.addresses[user.addresses.length - 1]
 }
 
 /**
@@ -132,6 +132,7 @@ async function addAnAddress(_, args, { models: { User }, user: { id } }) {
 */
 async function updateAnAddress(_, args, { models: { User }, user: { id } }) {
   let user = await User.findOne({ 'addresses._id': args.addressID })
+  if (!user) throw new UserInputError('no such an address')
   if (user._id != id) throw new AuthenticationError('you r not authorized')
 
   const index = user.addresses.findIndex(
@@ -148,7 +149,7 @@ async function updateAnAddress(_, args, { models: { User }, user: { id } }) {
 
   await user.save()
 
-  return user.addresses
+  return user.addresses[index]
 }
 
 /**
@@ -211,6 +212,40 @@ async function addresses(_, __, { models: { User }, user: { id } }) {
   return user.addresses
 }
 
+/**
+|--------------------------------------------------
+| address
+|--------------------------------------------------
+*/
+async function address(_, args, { models: { User }, user: { id } }) {
+  let user = await User.findOne({ 'addresses._id': args.addressID })
+  if (!user) throw new UserInputError('no such an address')
+  if (user._id != id) throw new AuthenticationError('you r not authorized')
+
+  const address = user.addresses.find(address => address._id == args.addressID)
+
+  return address
+}
+
+/**
+|--------------------------------------------------
+| Delete An Address
+|--------------------------------------------------
+*/
+async function deleteAnAddress(_, args, { models: { User }, user: { id } }) {
+  let user = await User.findOne({ 'addresses._id': args.addressID })
+  if (!user) throw new UserInputError('no such an address')
+  if (user._id != id) throw new AuthenticationError('you r not authorized')
+
+  const index = user.addresses.findIndex(
+    address => address._id == args.addressID
+  )
+
+  const address = user.addresses.splice(index, 1)
+  await user.save()
+  return address[0]
+}
+
 export default {
   Mutation: {
     registerLocal,
@@ -219,12 +254,14 @@ export default {
     updateProfile,
     addAnAddress,
     updateAnAddress,
-    deleteUser
+    deleteUser,
+    deleteAnAddress
   },
   Query: {
     me,
     loginLocal,
     users,
-    addresses
+    addresses,
+    address
   }
 }

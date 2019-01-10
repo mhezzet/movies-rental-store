@@ -1,4 +1,4 @@
-import { ApolloServer } from 'apollo-server'
+import { ApolloServer, ApolloError } from 'apollo-server'
 import config from 'config'
 import JWT from 'jsonwebtoken'
 import mongoose from 'mongoose'
@@ -17,6 +17,16 @@ const server = new ApolloServer({
       user = null
     }
     return { models, user }
+  },
+  formatError: error => {
+    if (
+      error.extensions.code === 'INTERNAL_SERVER_ERROR' &&
+      config.get('env') === 'producton'
+    ) {
+      logger.error(error)
+      delete error.extensions.exception
+    }
+    return error
   }
 })
 
