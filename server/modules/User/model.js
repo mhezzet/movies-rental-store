@@ -77,19 +77,19 @@ const userSchema = new mongoose.Schema(
     },
     firstName: {
       type: String,
-      maxlength: 255,
+      maxlength: 50,
       minlength: 2,
       lowercase: true,
       trim: true
     },
     lastName: {
       type: String,
-      maxlength: 255,
+      maxlength: 50,
       minlength: 2,
       lowercase: true,
       trim: true
     },
-    address: [addressSchema],
+    addresses: [addressSchema],
     active: {
       type: Boolean
     }

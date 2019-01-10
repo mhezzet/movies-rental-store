@@ -8,12 +8,17 @@ export default gql`
     registerLocal(email: String!, password: String!): AuthResolver
     registerFaceBook(authToken: String!): AuthResolver
     registerGoogle(authToken: String!): AuthResolver
-    updateProfile(data: updateProfileInput): User
+    updateProfile(data: updateProfileInput!): User @user
+    addAnAddress(address: address): [Address!]! @user
+    updateAnAddress(addressID: ID!, address: address): [Address!]! @user
+    deleteUser(userID: ID!): User @admin
   }
 
   type Query {
     me: User @user
     loginLocal(email: String!, password: String!): AuthResolver
+    users: [User!]! @admin
+    addresses: [Address!]! @user
   }
 
   type AuthResolver {
@@ -24,10 +29,10 @@ export default gql`
   type User {
     id: ID!
     email: String
-    picture: String!
+    picture: String
     firstName: String
     lastName: String
-    address: [Address]
+    addresses: [Address]
   }
 
   type Address {
@@ -42,10 +47,9 @@ export default gql`
   }
 
   input updateProfileInput {
-    picture: String!
+    picture: String
     firstName: String
     lastName: String
-    address: [address]
   }
 
   input address {

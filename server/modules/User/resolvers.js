@@ -96,6 +96,75 @@ async function registerGoogle(_, args, { models: { User } }) {
 
 /**
 |--------------------------------------------------
+| Update Profile
+|--------------------------------------------------
+*/
+async function updateProfile(_, args, { models: { User }, user: { id } }) {
+  const user = await User.findOneAndUpdate(
+    { _id: id },
+    { $set: { ...args.data } },
+    { new: true }
+  )
+  if (!user) throw new UserInputError('no such a user')
+
+  return user
+}
+
+/**
+|--------------------------------------------------
+| Add An Address
+|--------------------------------------------------
+*/
+async function addAnAddress(_, args, { models: { User }, user: { id } }) {
+  const user = await User.findOne({ _id: id })
+  if (!user) throw new UserInputError('no such a user')
+
+  user.addresses.push({ ...args.address })
+  await user.save()
+
+  return user.addresses
+}
+
+/**
+|--------------------------------------------------
+| Update An Address
+|--------------------------------------------------
+*/
+async function updateAnAddress(_, args, { models: { User }, user: { id } }) {
+  let user = await User.findOne({ 'addresses._id': args.addressID })
+  if (user._id != id) throw new AuthenticationError('you r not authorized')
+
+  const index = user.addresses.findIndex(
+    address => address._id == args.addressID
+  )
+
+  user.addresses[index].city = args.address.city
+  user.addresses[index].country = args.address.country
+  user.addresses[index].address = args.address.address
+  user.addresses[index].ddress2 = args.address.address2
+  user.addresses[index].district = args.address.district
+  user.addresses[index].postalCode = args.address.postalCode
+  user.addresses[index].phone = args.address.phone
+
+  await user.save()
+
+  return user.addresses
+}
+
+/**
+|--------------------------------------------------
+| Delete User
+|--------------------------------------------------
+*/
+async function deleteUser(_, args, { models: { User } }) {
+  const user = await User.findOneAndRemove({ _id: args.userID })
+  if (!user) throw new UserInputError('no such a user')
+
+  return user
+}
+
+/**
+|--------------------------------------------------
 | Login Local
 |--------------------------------------------------
 */
@@ -117,17 +186,45 @@ async function loginLocal(_, args, { models: { User } }) {
 */
 async function me(_, __, { models: { User }, user: { id } }) {
   const user = await User.findOne({ _id: id })
+  if (!user) throw new UserInputError('no such a user')
+
   return user
+}
+
+/**
+|--------------------------------------------------
+| users
+|--------------------------------------------------
+*/
+async function users(_, __, { models: { User } }) {
+  const users = await User.find({})
+  return users
+}
+
+/**
+|--------------------------------------------------
+| addresses
+|--------------------------------------------------
+*/
+async function addresses(_, __, { models: { User }, user: { id } }) {
+  const user = await User.findOne({ _id: id })
+  return user.addresses
 }
 
 export default {
   Mutation: {
     registerLocal,
     registerFaceBook,
-    registerGoogle
+    registerGoogle,
+    updateProfile,
+    addAnAddress,
+    updateAnAddress,
+    deleteUser
   },
   Query: {
+    me,
     loginLocal,
-    me
+    users,
+    addresses
   }
 }
