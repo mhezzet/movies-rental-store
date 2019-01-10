@@ -1,4 +1,4 @@
-import mongoose from 'mongoose'
+import mongoose, { Schema } from 'mongoose'
 import uniqueValidator from 'mongoose-unique-validator'
 import bcrypt from 'bcrypt'
 import config from 'config'
@@ -90,6 +90,12 @@ const userSchema = new mongoose.Schema(
       trim: true
     },
     addresses: [addressSchema],
+    rentals: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'rental'
+      }
+    ],
     active: {
       type: Boolean
     }
