@@ -1,9 +1,3 @@
-import { makeExecutableSchema } from 'apollo-server'
-import resolvers from './resolvers'
-import typeDefs from './typeDefs'
+export { default as rentalResolvers } from './resolvers'
+export { default as rentalTypeDefs } from './typeDefs'
 export { default as Rental } from './model'
-
-export const RentalSchema = makeExecutableSchema({
-  typeDefs,
-  resolvers
-})

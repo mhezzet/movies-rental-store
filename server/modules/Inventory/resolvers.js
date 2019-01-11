@@ -15,8 +15,5 @@ async function newInventory(_, { movies }, { models: { Inventory, Movie } }) {
 export default {
   Mutation: {
     newInventory
-  },
-  Query: {
-    dummy: () => 'dummy'
   }
 }

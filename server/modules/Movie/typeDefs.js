@@ -3,13 +3,13 @@ import { gql } from 'apollo-server'
 export default gql`
   directive @admin on FIELD_DEFINITION
 
-  type Mutation {
+  extend type Mutation {
     addMovie(movie: movieInput!): Movie @admin
     updateMovie(movieID: ID!, movie: movieInput!): Movie @admin
     deleteMovie(movieID: ID!): Movie @admin
   }
 
-  type Query {
+  extend type Query {
     movie(movieID: ID!): Movie
     movies: [Movie!]!
   }
