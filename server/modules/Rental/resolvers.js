@@ -1,14 +1,23 @@
-import { UserInputError, AuthenticationError } from 'apollo-server'
+import { UserInputError, AuthenticationError, ApolloError } from 'apollo-server'
 import { GraphQLScalarType } from 'graphql'
 import { Kind } from 'graphql/language'
 
 async function makeRental(
   _,
   args,
-  { models: { Rental, Inventory }, user: { id } }
+  { models: { Rental, Inventory, User, Movie }, user: { id } }
 ) {
   const inventory = await Inventory.findOne({ _id: args.inventoryID })
   if (!inventory) throw new UserInputError('no such an inventory')
+
+  const movies = await Movie.updateMany(
+    {
+      $and: [{ _id: { $in: inventory.movies } }, { numberInStock: { $gt: 0 } }]
+    },
+    { $inc: { numberInStock: -1 } }
+  )
+
+  if (!movies.nModified) throw new ApolloError('internal server error')
 
   let rental = await Rental.create({
     inventory: args.inventoryID,
@@ -16,9 +25,11 @@ async function makeRental(
     returnDate: args.returnDate
   })
 
-  rental = await Rental.findOne({ _id: rental._id }).populate({
+  await User.findOneAndUpdate({ _id: id }, { $push: { rentals: rental._id } })
+
+  await Rental.populate(rental, {
     path: 'inventory user',
-    populate: { path: 'movies' }
+    populate: { path: 'movies rentals' }
   })
 
   return rental
