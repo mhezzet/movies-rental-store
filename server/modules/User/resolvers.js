@@ -14,6 +14,10 @@ async function registerLocal(_, args, { models: { User } }) {
   })
 
   const token = user.genToken()
+  await User.populate(user, {
+    path: 'rentals',
+    populate: { path: 'inventory', populate: { path: 'movies' } }
+  })
   return { user, token }
 }
 
@@ -35,9 +39,10 @@ async function registerFaceBook(_, args, { models: { User } }) {
     throw new AuthenticationError('invalid access token')
   }
 
-  let user = await User.findOne({ facebookID: response.data.id }).populate(
-    'rentals'
-  )
+  let user = await User.findOne({ facebookID: response.data.id }).populate({
+    path: 'rentals',
+    populate: { path: 'inventory', populate: { path: 'movies' } }
+  })
   if (user) {
     const token = user.genToken()
     return { user, token }
@@ -54,7 +59,10 @@ async function registerFaceBook(_, args, { models: { User } }) {
   })
 
   const token = user.genToken()
-  await User.populate(user, 'rentals')
+  await User.populate(user, {
+    path: 'rentals',
+    populate: { path: 'inventory', populate: { path: 'movies' } }
+  })
   return { user, token }
 }
 
@@ -78,9 +86,10 @@ async function registerGoogle(_, args, { models: { User } }) {
     throw new AuthenticationError('invalid access token')
   }
 
-  let user = await User.findOne({ googleID: response.data.id }).populate(
-    'rentals'
-  )
+  let user = await User.findOne({ googleID: response.data.id }).populate({
+    path: 'rentals',
+    populate: { path: 'inventory', populate: { path: 'movies' } }
+  })
   if (user) {
     const token = user.genToken()
     return { user, token }
@@ -96,7 +105,10 @@ async function registerGoogle(_, args, { models: { User } }) {
   })
 
   const token = user.genToken()
-  await User.populate(user, 'rentals')
+  await User.populate(user, {
+    path: 'rentals',
+    populate: { path: 'inventory', populate: { path: 'movies' } }
+  })
   return { user, token }
 }
 
@@ -113,7 +125,10 @@ async function updateProfile(_, args, { models: { User }, user: { id } }) {
   )
   if (!user) throw new UserInputError('no such a user')
 
-  await User.populate(user, 'rentals')
+  await User.populate(user, {
+    path: 'rentals',
+    populate: { path: 'inventory', populate: { path: 'movies' } }
+  })
   return user
 }
 
@@ -168,7 +183,11 @@ async function deleteUser(_, args, { models: { User } }) {
   const user = await User.findOneAndRemove({ _id: args.userID })
   if (!user) throw new UserInputError('no such a user')
 
-  await User.populate(user, 'rentals')
+  await User.populate(user, {
+    path: 'rentals',
+    populate: { path: 'inventory', populate: { path: 'movies' } }
+  })
+
   return user
 }
 
@@ -178,7 +197,10 @@ async function deleteUser(_, args, { models: { User } }) {
 |--------------------------------------------------
 */
 async function loginLocal(_, args, { models: { User } }) {
-  const user = await User.findOne({ email: args.email }).populate('rentals')
+  const user = await User.findOne({ email: args.email }).populate({
+    path: 'rentals',
+    populate: { path: 'inventory', populate: { path: 'movies' } }
+  })
   if (!user) throw new UserInputError('invalid email or password')
 
   const validPassword = await user.validPassword(args.password)
@@ -194,7 +216,10 @@ async function loginLocal(_, args, { models: { User } }) {
 |--------------------------------------------------
 */
 async function me(_, __, { models: { User }, user: { id } }) {
-  const user = await User.findOne({ _id: id }).populate('rentals')
+  const user = await User.findOne({ _id: id }).populate({
+    path: 'rentals',
+    populate: { path: 'inventory', populate: { path: 'movies' } }
+  })
   if (!user) throw new UserInputError('no such a user')
 
   return user
@@ -206,7 +231,11 @@ async function me(_, __, { models: { User }, user: { id } }) {
 |--------------------------------------------------
 */
 async function users(_, __, { models: { User } }) {
-  const users = await User.find({}).populate('rentals')
+  const users = await User.find({}).populate({
+    path: 'rentals',
+    populate: { path: 'inventory', populate: { path: 'movies' } }
+  })
+
   return users
 }
 

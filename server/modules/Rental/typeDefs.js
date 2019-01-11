@@ -1,11 +1,16 @@
 import { gql } from 'apollo-server'
 
 export default gql`
-  directive @user on FIELD_DEFINITION
   scalar Date
-  # TODO:Not Finished
+
   extend type Mutation {
     makeRental(inventoryID: ID!, returnDate: Date!): Rental @user
+  }
+
+  extend type Query {
+    rental(rentalID: ID!): Rental @user
+    rentalsByUser: [Rental!]! @user
+    rentals: [Rental!]! @admin
   }
 
   type Rental {

@@ -35,9 +35,44 @@ async function makeRental(
   return rental
 }
 
+async function rental(_, args, { models: { Rental }, user: { id } }) {
+  const rental = await Rental.findOne({ _id: args.rentalID }).populate({
+    path: 'inventory user',
+    populate: { path: 'movies rentals' }
+  })
+
+  if (rental.user._id != id)
+    throw new AuthenticationError('accessed denied: you r not allowed')
+
+  return rental
+}
+
+async function rentalsByUser(_, args, { models: { Rental }, user: { id } }) {
+  const rentals = await Rental.find({ user: id }).populate({
+    path: 'inventory user',
+    populate: { path: 'movies rentals' }
+  })
+
+  return rentals
+}
+
+async function rentals(_, args, { models: { Rental } }) {
+  const rentals = await Rental.find({}).populate({
+    path: 'inventory user',
+    populate: { path: 'movies rentals' }
+  })
+
+  return rentals
+}
+
 export default {
   Mutation: {
     makeRental
+  },
+  Query: {
+    rental,
+    rentalsByUser,
+    rentals
   },
   Date: new GraphQLScalarType({
     name: 'Date',
