@@ -4,19 +4,21 @@ const rentalSchema = new Schema(
   {
     inventory: {
       type: Schema.Types.ObjectId,
-      ref: 'inventory'
+      ref: 'inventory',
+      required: true
     },
     user: {
       type: Schema.Types.ObjectId,
-      ref: 'user'
+      ref: 'user',
+      required: true
     },
     rentalDate: {
-      type: String,
-      maxlength: 50
+      type: Date,
+      default: new Date()
     },
     returnDate: {
-      type: String,
-      maxlength: 50
+      type: Date,
+      required: true
     }
   },
   {

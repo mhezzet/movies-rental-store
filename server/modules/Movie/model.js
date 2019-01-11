@@ -5,7 +5,8 @@ const movieSchema = new Schema(
     title: {
       type: String,
       trim: true,
-      maxlength: 50
+      maxlength: 50,
+      required: true
     },
     description: {
       type: String,
@@ -22,7 +23,17 @@ const movieSchema = new Schema(
     rating: {
       type: Number,
       max: 10
-    }
+    },
+    poster: {
+      type: String,
+      maxlength: 1024
+    },
+    genre: [
+      {
+        type: String,
+        enum: ['action', 'comedy', 'drama']
+      }
+    ]
   },
   { timestamps: true }
 )
