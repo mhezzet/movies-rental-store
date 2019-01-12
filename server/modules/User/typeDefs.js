@@ -9,8 +9,8 @@ export default gql`
     registerFaceBook(authToken: String!): AuthResolver
     registerGoogle(authToken: String!): AuthResolver
     updateProfile(data: updateProfileInput!): User @user
-    addAnAddress(address: address): Address @user
-    updateAnAddress(addressID: ID!, address: address): Address @user
+    addAnAddress(address: address!): Address @user
+    updateAnAddress(addressID: ID!, address: address!): Address @user
     deleteUser(userID: ID!): User @admin
     deleteAnAddress(addressID: ID!): Address @user
   }

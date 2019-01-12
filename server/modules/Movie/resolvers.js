@@ -28,6 +28,8 @@ async function updateMovie(_, args, { models: { Movie } }) {
       new: true
     }
   )
+  if (!movie) throw new UserInputError('no such a movie')
+
   return movie
 }
 
