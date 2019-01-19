@@ -13,11 +13,11 @@ export default gql`
     updateAnAddress(addressID: ID!, address: address!): Address @user
     deleteUser(userID: ID!): User @admin
     deleteAnAddress(addressID: ID!): Address @user
+    loginLocal(email: String!, password: String!): AuthResolver
   }
 
   type Query {
     me: User @user
-    loginLocal(email: String!, password: String!): AuthResolver
     users: [User!]! @admin
     addresses: [Address!]! @user
     address(addressID: ID!): Address @user

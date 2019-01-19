@@ -119,6 +119,6 @@ userSchema.pre('save', async function(next) {
   this.password = await bcrypt.hash(this.password, salt)
 })
 
-userSchema.plugin(uniqueValidator)
+userSchema.plugin(uniqueValidator, { message: 'email is not available' })
 
 export default mongoose.model('user', userSchema)

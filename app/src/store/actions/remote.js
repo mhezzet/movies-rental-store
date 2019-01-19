@@ -28,7 +28,7 @@ export const REGISTER_LOCAL = gql`
 */
 
 export const LOGIN_LOCAL = gql`
-  query loginLocal($email: String!, $password: String!) {
+  mutation loginLocal($email: String!, $password: String!) {
     loginLocal(email: $email, password: $password) {
       user {
         id

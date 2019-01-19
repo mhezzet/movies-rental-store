@@ -4,6 +4,7 @@ import CssBaseline from '@material-ui/core/CssBaseline'
 import RegisterPage from './views/RegisterPage'
 import NotFound from './views/NotFound'
 import LandPage from './views/LandPage'
+import './styles/base.css'
 
 export default function App() {
   return (

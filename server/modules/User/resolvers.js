@@ -51,7 +51,6 @@ async function registerFaceBook(_, args, { models: { User } }) {
   user = await User.create({
     method: 'facebook',
     roles: ['user'],
-    email: response.data.email,
     facebookID: response.data.id,
     picture: response.data.picture.data.url,
     firstName: response.data.first_name,
@@ -292,11 +291,11 @@ export default {
     addAnAddress,
     updateAnAddress,
     deleteUser,
+    loginLocal,
     deleteAnAddress
   },
   Query: {
     me,
-    loginLocal,
     users,
     addresses,
     address

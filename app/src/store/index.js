@@ -7,7 +7,7 @@ import defaults from './defaults'
 export * from './actions'
 
 export const client = new ApolloClient({
-  uri: 'localhost:3000/graphql',
+  uri: 'http://localhost:3000',
   request: operation => {
     operation.setContext({
       headers: {
@@ -16,9 +16,9 @@ export const client = new ApolloClient({
     })
   },
   clientState: {
-    defaults,
     resolvers,
-    typeDefs
+    typeDefs,
+    defaults
   }
 })
 
