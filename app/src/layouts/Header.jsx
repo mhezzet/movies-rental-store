@@ -1,10 +1,11 @@
 import React from 'react'
+import { Mutation, Query } from 'react-apollo'
+import { RESET_AUTH, GET_AUTH } from '../store'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
-import { Mutation, Query } from 'react-apollo'
-import { RESET_AUTH, GET_AUTH } from '../store'
+import Avatar from '@material-ui/core/Avatar'
 
 const style = {
   logo: {
@@ -18,7 +19,6 @@ export default function Header(props) {
     <Query query={GET_AUTH}>
       {({ data }) => (
         <AppBar position="static">
-          {console.log(data)}
           <Toolbar>
             <Typography
               variant="h6"
@@ -48,9 +48,39 @@ export default function Header(props) {
             {data.isAuth && (
               <Mutation mutation={RESET_AUTH}>
                 {logout => (
-                  <Button onClick={logout} color="inherit">
-                    logout
-                  </Button>
+                  <>
+                    <Avatar
+                      alt="avatar"
+                      src={JSON.parse(data.profile).picture}
+                    />
+                    {JSON.parse(data.profile).roles.includes('admin') ? (
+                      <Button
+                        onClick={() => props.history.push('/admin')}
+                        color="inherit"
+                      >
+                        Admin
+                      </Button>
+                    ) : JSON.parse(data.profile).email ? (
+                      <Button
+                        onClick={() => props.history.push('/dashboard')}
+                        color="inherit"
+                      >
+                        {JSON.parse(data.profile).email}
+                      </Button>
+                    ) : (
+                      <Button
+                        onClick={() => props.history.push('/dashboard')}
+                        color="inherit"
+                      >
+                        {JSON.parse(data.profile).firstName +
+                          ' ' +
+                          JSON.parse(data.profile).lastName}
+                      </Button>
+                    )}
+                    <Button onClick={logout} color="inherit">
+                      logout
+                    </Button>
+                  </>
                 )}
               </Mutation>
             )}

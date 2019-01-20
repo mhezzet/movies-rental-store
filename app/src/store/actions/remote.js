@@ -15,6 +15,7 @@ export const REGISTER_LOCAL = gql`
         picture
         firstName
         lastName
+        roles
       }
       token
     }
@@ -36,6 +37,7 @@ export const LOGIN_LOCAL = gql`
         picture
         firstName
         lastName
+        roles
         addresses {
           id
           city
@@ -82,6 +84,7 @@ export const ME = gql`
       picture
       firstName
       lastName
+      roles
       rentals {
         id
         rentalDate
@@ -127,6 +130,7 @@ export const REGISTER_GOOGLE = gql`
         picture
         firstName
         lastName
+        roles
         addresses {
           id
           city
@@ -157,6 +161,7 @@ export const REGISTER_FACEBOOK = gql`
         picture
         firstName
         lastName
+        roles
         addresses {
           id
           city
@@ -187,6 +192,7 @@ export const UPDATE_PROFILE = gql`
       picture
       firstName
       lastName
+      roles
       addresses {
         id
         city

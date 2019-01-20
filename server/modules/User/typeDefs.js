@@ -36,6 +36,7 @@ export default gql`
     lastName: String
     addresses: [Address]
     rentals: [Rental!]!
+    roles:[String!]!
   }
 
   type Address {

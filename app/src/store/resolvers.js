@@ -1,6 +1,6 @@
 async function setAuth(_, { token, user }, { cache }) {
   localStorage.setItem('token', token)
-  localStorage.setItem('user', JSON.stringify(user))
+  localStorage.setItem('profile', JSON.stringify(user))
   cache.writeData({
     data: { token, profile: JSON.stringify(user), isAuth: true }
   })
@@ -10,7 +10,7 @@ async function setAuth(_, { token, user }, { cache }) {
 
 function resetAuth(_, __, { cache }) {
   localStorage.removeItem('token')
-  localStorage.removeItem('user')
+  localStorage.removeItem('profile')
 
   cache.writeData({ data: { token: '', profile: '', isAuth: false } })
   return true

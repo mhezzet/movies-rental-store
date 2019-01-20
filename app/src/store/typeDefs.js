@@ -1,13 +1,20 @@
 import gql from 'graphql-tag'
 
 export default gql`
+  type Query {
+    token: String
+    profile: String
+    isAuth: Boolean
+  }
+
   type Mutation {
-    setAuth(token: ID!, user: user!): Boolean!
+    setAuth(token: ID!, user: User!): Boolean!
     resetAuth: Boolean!
   }
 
-  input user {
+  type User {
     email: String
     picture: String
+    roles: [String!]!
   }
 `
